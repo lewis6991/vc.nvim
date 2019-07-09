@@ -1,0 +1,9 @@
+// this is a comment
+# this is a comment
++libext+.v+.vlib+.sv
+-y      $EXAMPLE_HOME/verilog
++incdir+$EXAMPLE_HOME/verilog
+
++define+FOO=$HELLO
+
+$EXAMPLE_HOME/verilog/dut.sv
