@@ -9,44 +9,66 @@ local syntax = vim.cmd.syntax
 syntax'clear'
 syntax'case match'
 
-syntax[[match vcComment "//.*" contains=@Spell]]
-syntax[[match vcComment "#.*"  contains=@Spell]]
+for _, attrs in ipairs {
+  {'vcComment',     '//.*', contains='@Spell' },
+  {'vcComment',     '#.*',  contains='@Spell' },
 
-syntax[[match vcLibExt    "+libext+\S*" contains=vcLibExtExt]]
-syntax[[match vcLibExtExt "\.\S\+"      contained]]
+  {'vcLibExt',      [[+libext+\S*]], contains='vcLibExtExt' },
+  {'vcLibExtExt',   [[\.\S\+]],      contained=true },
 
-syntax[[match vcIncDir    "+incdir+\S*"    contains=vcIncDirDir]]
-syntax[[match vcIncDirDir "+incdir+\zs\S*" contained contains=vcVariable]]
+  {'vcIncDir',      [[+incdir+\S*]], contains='vcIncDirDir' },
 
-syntax[[match vcLibDir    "+libdir+\S*"    contains=vcLibDirDir]]
-syntax[[match vcLibDirDir "+libdir+\zs\S*" contained contains=vcVariable]]
+  {'vcIncDirDir',   [[+incdir+\zs\S*]], contained=true, contains='vcVariable' },
 
-syntax[[match vcLibDir    "-y\s\+\S\+"     contains=vcLibDirDir]]
-syntax[[match vcLibDirDir "-y\s\+\zs\S*"   contained contains=vcVariable]]
+  {'vcLibDir',      [[+libdir+\S*]],    contains='vcLibDirDir' },
+  {'vcLibDirDir',   [[+libdir+\zs\S*]], contained=true, contains='vcVariable' },
 
-syntax[[match vcKeyword   "-L"]]
+  {'vcLibDir',      [[-y\s\+\S\+]],   contains='vcLibDirDir' },
+  {'vcLibDirDir',   [[-y\s\+\zs\S*]], contained=true, contains='vcVariable' },
 
-syntax[[match vcDefine      "+define+\S*"    contains=vcDefineName,vcDefineValue]]
-syntax[[match vcDefineName  "+\zs[^+=]*\ze=" contained contains=vcVariable]]
-syntax[[match vcDefineValue "=\zs\S\+"       contained contains=vcVariable]]
+  {'vcKeyword',     '-L' },
 
-syntax[[match vcVariable "${\w\+}"]]
-syntax[[match vcVariable "$\w\+"]]
+  {'vcDefine',      [[+define+\S*]],    contains='vcDefineName,vcDefineValue' },
+  {'vcDefineName',  [[+\zs[^+=]*\ze=]], contained=true, contains='vcVariable' },
+  {'vcDefineValue', [[=\zs\S\+]],       contained=true, contains='vcVariable' },
 
-local function hl_link(from, to)
-  vim.api.nvim_set_hl(0, from, { link = to, default = true })
+  {'vcVariable',    [[${\w\+}]] },
+  {'vcVariable',    [[$\w\+]] },
+} do
+  local args = {}
+
+  for k, v in pairs(attrs) do
+    if type(k) == 'string' then
+      if type(v) == 'boolean' then
+        args[#args+1] = k
+      else
+        args[#args+1] = string.format('%s=%s', k, v)
+      end
+    end
+  end
+
+  syntax{
+    'match',
+    attrs[1],
+    string.format('"%s"', attrs[2]),
+    unpack(args)
+  }
 end
 
-hl_link('vcComment'      , 'Comment' )
-hl_link('vcDefine'       , 'Keyword' )
-hl_link('vcDefineAssign' , 'Constant')
-hl_link('vcDefineName'   , 'Operator')
-hl_link('vcDefineValue'  , 'Operator')
-hl_link('vcIncDir'       , 'Keyword' )
-hl_link('vcKeyword'      , 'Keyword' )
-hl_link('vcLibDir'       , 'Keyword' )
-hl_link('vcLibExt'       , 'Keyword' )
-hl_link('vcLibExtExt'    , 'Operator')
-hl_link('vcVariable'     , 'Constant')
+for from, to in pairs {
+  vcComment      = 'Comment' ,
+  vcDefine       = 'Keyword' ,
+  vcDefineAssign = 'Constant',
+  vcDefineName   = 'Operator',
+  vcDefineValue  = 'Operator',
+  vcIncDir       = 'Keyword' ,
+  vcKeyword      = 'Keyword' ,
+  vcLibDir       = 'Keyword' ,
+  vcLibExt       = 'Keyword' ,
+  vcLibExtExt    = 'Operator',
+  vcVariable     = 'Constant'
+} do
+  vim.api.nvim_set_hl(0, from, { link = to, default = true })
+end
 
 vim.b.current_syntax = 'vc'
