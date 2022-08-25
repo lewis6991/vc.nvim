@@ -35,16 +35,16 @@ syntax[[match vcVariable "$\w\+"]]
 
 local hl = vim.api.nvim_set_hl
 
-hl(0, 'vcComment'      , { link = 'Comment'  })
-hl(0, 'vcDefine'       , { link = 'Keyword'  })
-hl(0, 'vcDefineAssign' , { link = 'Constant' })
-hl(0, 'vcDefineName'   , { link = 'Operator' })
-hl(0, 'vcDefineValue'  , { link = 'Operator' })
-hl(0, 'vcIncDir'       , { link = 'Keyword'  })
-hl(0, 'vcKeyword'      , { link = 'Keyword'  })
-hl(0, 'vcLibDir'       , { link = 'Keyword'  })
-hl(0, 'vcLibExt'       , { link = 'Keyword'  })
-hl(0, 'vcLibExtExt'    , { link = 'Operator' })
-hl(0, 'vcVariable'     , { link = 'Constant' })
+hl(0, 'vcComment'      , { link = 'Comment'  , default = true })
+hl(0, 'vcDefine'       , { link = 'Keyword'  , default = true })
+hl(0, 'vcDefineAssign' , { link = 'Constant' , default = true })
+hl(0, 'vcDefineName'   , { link = 'Operator' , default = true })
+hl(0, 'vcDefineValue'  , { link = 'Operator' , default = true })
+hl(0, 'vcIncDir'       , { link = 'Keyword'  , default = true })
+hl(0, 'vcKeyword'      , { link = 'Keyword'  , default = true })
+hl(0, 'vcLibDir'       , { link = 'Keyword'  , default = true })
+hl(0, 'vcLibExt'       , { link = 'Keyword'  , default = true })
+hl(0, 'vcLibExtExt'    , { link = 'Operator' , default = true })
+hl(0, 'vcVariable'     , { link = 'Constant' , default = true })
 
 vim.b.current_syntax = 'vc'
