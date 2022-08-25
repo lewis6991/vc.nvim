@@ -33,18 +33,20 @@ syntax[[match vcDefineValue "=\zs\S\+"       contained contains=vcVariable]]
 syntax[[match vcVariable "${\w\+}"]]
 syntax[[match vcVariable "$\w\+"]]
 
-local hl = vim.api.nvim_set_hl
+local function hl_link(from, to)
+  vim.api.nvim_set_hl(0, from, { link = to, default = true })
+end
 
-hl(0, 'vcComment'      , { link = 'Comment'  , default = true })
-hl(0, 'vcDefine'       , { link = 'Keyword'  , default = true })
-hl(0, 'vcDefineAssign' , { link = 'Constant' , default = true })
-hl(0, 'vcDefineName'   , { link = 'Operator' , default = true })
-hl(0, 'vcDefineValue'  , { link = 'Operator' , default = true })
-hl(0, 'vcIncDir'       , { link = 'Keyword'  , default = true })
-hl(0, 'vcKeyword'      , { link = 'Keyword'  , default = true })
-hl(0, 'vcLibDir'       , { link = 'Keyword'  , default = true })
-hl(0, 'vcLibExt'       , { link = 'Keyword'  , default = true })
-hl(0, 'vcLibExtExt'    , { link = 'Operator' , default = true })
-hl(0, 'vcVariable'     , { link = 'Constant' , default = true })
+hl_link('vcComment'      , 'Comment' )
+hl_link('vcDefine'       , 'Keyword' )
+hl_link('vcDefineAssign' , 'Constant')
+hl_link('vcDefineName'   , 'Operator')
+hl_link('vcDefineValue'  , 'Operator')
+hl_link('vcIncDir'       , 'Keyword' )
+hl_link('vcKeyword'      , 'Keyword' )
+hl_link('vcLibDir'       , 'Keyword' )
+hl_link('vcLibExt'       , 'Keyword' )
+hl_link('vcLibExtExt'    , 'Operator')
+hl_link('vcVariable'     , 'Constant')
 
 vim.b.current_syntax = 'vc'
